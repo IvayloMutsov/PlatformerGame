@@ -4,8 +4,9 @@ using UnityEngine.SceneManagement;
 public class StartMenuScript : MonoBehaviour
 {
     [SerializeField] AudioSource audio;
+    public GameObject instructions;
 
-    private void Awake()
+    void Awake()
     {
         audio = gameObject.GetComponent<AudioSource>();
     }
@@ -23,5 +24,17 @@ public class StartMenuScript : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+
+    public void ShowInstructions()
+    {
+        if (instructions.activeSelf == true)
+        {
+            instructions.SetActive(false);
+        }
+        else
+        {
+            instructions.SetActive(true);
+        }
     }
 }
