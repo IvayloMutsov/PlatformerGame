@@ -1,35 +1,36 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SlimeProjectileScript : MonoBehaviour
 {
-    [SerializeField] PlayerScript player;
-    [SerializeField] GameObject projectile;
+    [SerializeField] Player player;
+    [SerializeField] Text health;
     private float speed = 4f;
+    Vector3 direction;
 
     void Awake()
     {
-        projectile = gameObject;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+        player = GameObject.Find("Knight").GetComponent<Player>();
+        direction = player.transform.position - transform.position;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         MoveProjectile();
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            player.health--;
-            Destroy(projectile);
+            health.text = (int.Parse(health.text) - 1).ToString();
+            Destroy(gameObject);
         }
     }
 
     void MoveProjectile()
     {
-        Vector3 direction = player.transform.position - transform.position;
         direction.Normalize();
         transform.Translate(direction * speed * Time.deltaTime);
     }

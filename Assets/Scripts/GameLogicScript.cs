@@ -15,7 +15,7 @@ public class GameLogicScript : MonoBehaviour
     {
         audio = gameObject.GetComponent<AudioSource>();
         pauseButton = GameObject.Find("PauseButton").GetComponent<Image>();
-        renderer = GameObject.Find("Player").GetComponent<Renderer>();
+        renderer = GameObject.Find("Body").GetComponent<Renderer>();
         healthText = GameObject.Find("HealthValue").GetComponent<Text>();
         gameOverScreen.SetActive(false);
     }
@@ -28,9 +28,11 @@ public class GameLogicScript : MonoBehaviour
     void Update()
     {
         bool canIseeMyPlayer = IsPlayerVisible();
-        if (canIseeMyPlayer == false)
+        if (canIseeMyPlayer == false && Time.realtimeSinceStartup > 3f || int.Parse(healthText.text) <= 0)
         {
+            healthText.text = "0";
             gameOverScreen.SetActive(true);
+            pauseButton.gameObject.SetActive(false);
         }
     }
 
