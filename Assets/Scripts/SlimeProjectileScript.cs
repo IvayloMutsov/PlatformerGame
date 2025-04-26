@@ -14,17 +14,15 @@ public class SlimeProjectileScript : MonoBehaviour
         direction = player.transform.position - transform.position;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         MoveProjectile();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Boundry"))
         {
-            health.text = (int.Parse(health.text) - 1).ToString();
             Destroy(gameObject);
         }
     }
