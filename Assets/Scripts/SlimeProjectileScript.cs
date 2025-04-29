@@ -19,12 +19,9 @@ public class SlimeProjectileScript : MonoBehaviour
         MoveProjectile();
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnBecameInvisible()
     {
-        if (collision.gameObject.CompareTag("Boundry"))
-        {
-            Destroy(gameObject);
-        }
+         Destroy(gameObject);
     }
 
     void MoveProjectile()

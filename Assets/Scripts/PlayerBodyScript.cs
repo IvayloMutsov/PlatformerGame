@@ -18,4 +18,9 @@ public class PlayerBodyScript : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+
+    void OnBecameInvisible()
+    {
+        playerHealth.LoseGame();
+    }
 }

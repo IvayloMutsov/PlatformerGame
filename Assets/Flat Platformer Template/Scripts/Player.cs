@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -17,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject leg0;
     [SerializeField] GameObject leg1;
     [SerializeField] GameLogicScript health;
+    private string sceneName;
 
     void Start()
     {
@@ -26,6 +29,7 @@ public class Player : MonoBehaviour
         leg0 = GameObject.Find("Leg0");
         leg1 = GameObject.Find("Leg1");
         health = GameObject.Find("GameLogicManager").GetComponent<GameLogicScript>();
+        sceneName = SceneManager.GetActiveScene().name;
     }
 
     void Update()
@@ -47,6 +51,11 @@ public class Player : MonoBehaviour
         else if (_inputAxis.x < 0)
         {
             mirror = true;   // Player is facing left
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            health.PauseGame();
         }
 
         FollowMouse();
@@ -129,7 +138,18 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Door")
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            if (sceneName == "Gameplay")
+            {
+                SceneManager.LoadScene("HardLevel", LoadSceneMode.Single);
+            }
+            else if (sceneName == "HardLevel")
+            {
+                SceneManager.LoadScene("BossLevel", LoadSceneMode.Single);
+            }
+        }
+        else if (collision.gameObject.CompareTag("Ending"))
         {
             health.WinGame();
         }

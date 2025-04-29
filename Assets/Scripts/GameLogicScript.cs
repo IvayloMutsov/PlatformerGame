@@ -6,7 +6,6 @@ public class GameLogicScript : MonoBehaviour
     public GameObject gameOverScreen;
     public GameObject winScreen;
     [SerializeField] AudioSource audio;
-    Renderer renderer;
     private Image pauseButton;
     public Sprite goSprite;
     public Sprite pauseSprite;
@@ -14,12 +13,22 @@ public class GameLogicScript : MonoBehaviour
 
     void Awake()
     {
-        audio = gameObject.GetComponent<AudioSource>();
-        pauseButton = GameObject.Find("PauseButton").GetComponent<Image>();
-        renderer = GameObject.Find("Body").GetComponent<Renderer>();
-        healthText = GameObject.Find("HealthValue").GetComponent<Text>();
-        gameOverScreen.SetActive(false);
-        winScreen.SetActive(false);
+        if (audio == null)
+            audio = GetComponent<AudioSource>();
+
+        if (pauseButton == null)
+            pauseButton = GameObject.Find("PauseButton")?.GetComponent<Image>();
+
+        if (healthText == null)
+            healthText = GameObject.Find("HealthValue")?.GetComponent<Text>();
+
+        if (gameOverScreen == null)
+            gameOverScreen = GameObject.Find("GameOverScreen");
+
+        if (winScreen == null)
+            winScreen = GameObject.Find("WinScreen");
+
+        Time.timeScale = 1;
     }
 
     void Start()
@@ -29,12 +38,9 @@ public class GameLogicScript : MonoBehaviour
 
     void Update()
     {
-        bool canIseeMyPlayer = IsPlayerVisible();
-        if (canIseeMyPlayer == false && Time.realtimeSinceStartup > 3f || int.Parse(healthText.text) <= 0)
+        if (int.Parse(healthText.text) <= 0)
         {
-            healthText.text = "0";
             LoseGame();
-            pauseButton.gameObject.SetActive(false);
         }
     }
 
@@ -59,9 +65,13 @@ public class GameLogicScript : MonoBehaviour
 
     public void LoseGame()
     {
-        gameOverScreen.SetActive(true);
-        pauseButton.gameObject.SetActive(false);
-        Time.timeScale = 0;
+        if (gameOverScreen != null)
+        {
+            gameOverScreen.SetActive(true);
+            pauseButton.gameObject.SetActive(false);
+            Time.timeScale = 0;
+            healthText.text = "0";
+        }
     }
 
     public void WinGame()
@@ -69,10 +79,5 @@ public class GameLogicScript : MonoBehaviour
         winScreen.SetActive(true);
         pauseButton.gameObject.SetActive(false);
         Time.timeScale = 0;
-    }
-
-    bool IsPlayerVisible()
-    {
-        return renderer.isVisible;
     }
 }
